@@ -3,8 +3,7 @@ RUN apk --no-cache add \
         libressl \
         lftp \
         bash
-ADD script.sh /bin/
-RUN chmod +x /bin/script.sh
-
-ENTRYPOINT /bin/script.sh
+ADD build.sh /bin/
+ADD compare.sh /bin/
+ADD upload.sh /bin/
 
