@@ -82,8 +82,11 @@ done < $CMP_DIFFERS_FROM_LOG
 
 # Zip build folder
 echo "Zipping build folder..."
-zip -qr $CMP_ARCHIVE $CMP_BUILD_DIR
+pushd $CMP_BUILD_DIR
+zip -qr $CMP_ARCHIVE *
+popd
+mv "$CMP_BUILD_DIR/$CMP_ARCHIVE.zip" ./
 echo "Finished zipping build."
 
 # Clean up temporary files
-# rm -rf $CMP_TMP
+rm -rf $CMP_TMP
