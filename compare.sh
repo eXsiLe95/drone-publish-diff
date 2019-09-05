@@ -59,7 +59,7 @@ echo "Finished finding differences between builds."
 # Create build folder
 mkdir $CMP_BUILD_DIR
 
-# Copy all files that only occur in master into build folder
+# Copy all files that only occur in master into build folder TODO Change to file deletion list
 while IFS="" read -r file || [ -n "$file" ]
 do
     destination_file="$CMP_BUILD_DIR/$(echo $file  | cut -d'/' -f3-)"
