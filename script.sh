@@ -21,6 +21,8 @@ fi
 # Allow and enforce SSL decryption
 if [ -z "$FTP_SECURE" ]; then
     FTP_SECURE="true"
+else
+    FTP_SECURE="false"
 fi
 
 # Verify certificate and check hostname
