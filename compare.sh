@@ -15,8 +15,8 @@ current_directory=$(pwd)
 if ! [ -d $CMP_MASTER_FOLDER ]; then
     # Reference cache not mounted
     echo "Reference cache not mounted"
-    exit 1
-    # mkdir $CMP_MASTER_FOLDER # DEBUG ONLY
+    # exit 1
+    mkdir $CMP_MASTER_FOLDER # DEBUG ONLY
 fi
 
 cd $CMP_MASTER_FOLDER
@@ -174,10 +174,8 @@ if [ -z "$FTP_VERIFY" ]; then
 fi
 
 # Destination directory on remote server
-if [ "$DRONE_PULL_REQUEST" ]; then
-    FTP_DEST_DIR=$DRONE_PULL_REQUEST
-else
-    FTP_DEST_DIR=""
+if [ -z "$FTP_DEST_DIR" ]; then
+    FTP_DEST_DIR="/"
 fi
 
 # Source directory on local machine
@@ -194,7 +192,7 @@ fi
 
 # Clean remote directory before deploy
 if [ "$FTP_CLEAN_DIR" = true ]; then
-    FTP_CLEAN_DIR="rm -r $FTP_DEST_DIR"
+    FTP_CLEAN_DIR="rm -r $FTP_DEST_DIR"/"$DRONE_PULL_REQUEST"
 else
     FTP_CLEAN_DIR=""
 fi
@@ -215,7 +213,7 @@ echo "Opening lftp connection with parameters:"
 echo "FTP Username: " $FTP_USERNAME
 echo "FTP Password: " $FTP_PASSWORD
 echo "FTP Hostname: " $FTP_HOSTNAME
-echo "FTP Destination directory: " $FTP_DEST_DIR
+echo "FTP Destination directory: " $FTP_DEST_DIR"/"$DRONE_PULL_REQUEST
 
 lftp -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOSTNAME << EOF
 set ftp:ssl-allow $FTP_SECURE
@@ -224,7 +222,7 @@ set ftp:ssl-protect-data $FTP_SECURE
 set ssl:verify-certificate $FTP_VERIFY
 set ssl:check-hostname $FTP_VERIFY
 $FTP_CLEAN_DIR
-mirror --verbose $FTP_CHMOD -R $FTP_INCLUDE_STRING $FTP_EXCLUDE_STRING -R $FTP_DEST_DIR
+mirror --verbose $FTP_CHMOD -R $FTP_INCLUDE_STRING $FTP_EXCLUDE_STRING -R $FTP_DEST_DIR"/"$DRONE_PULL_REQUEST
 wait all
 exit
 EOF

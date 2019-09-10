@@ -19,7 +19,9 @@ RUN chmod +x ./compare.sh
 # ENV FTP_PASSWORD="Jpwd123!"
 # ENV FTP_VERIFY="false"
 # ENV FTP_SECURE="false"
+# ENV FTP_DEST_DIR="patchtester/"
 
 # ENV BRANCH_NAME="4.0-dev"
+# ENV DRONE_PULL_REQUEST="12345"
 
 ENTRYPOINT ./compare.sh
